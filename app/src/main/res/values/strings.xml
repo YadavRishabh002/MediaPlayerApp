@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">MediaPlayerApp</string>
+    <string name="status_playing_video">Status: Playing Video</string>
+    <string name="status_playing_audio">Status: Playing Audio</string>
+    <string name="status_video_paused">Status: Video Paused</string>
+    <string name="status_audio_paused">Status: Audio Paused</string>
+    <string name="status_video_stopped">Status: Video Stopped</string>
+    <string name="status_audio_stopped">Status: Audio Stopped</string>
+    <string name="status_video_restarted">Status: Video Restarted</string>
+    <string name="status_audio_restarted">Status: Audio Restarted</string>
+    <string name="status_audio_loaded">Status: Audio File Loaded. Press Play.</string>
+    <string name="status_video_loaded">Status: Video URL Loaded. Press Play.</string>
+    <string name="msg_open_media">Please open a file or URL first</string>
+    <string name="msg_error_audio">Error loading audio</string>
+    <string name="dialog_title_video_url">Enter Video URL</string>
+    <string name="dialog_btn_open">Open</string>
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="sample_video_url">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</string>
 </resources>
