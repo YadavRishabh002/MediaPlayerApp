@@ -1,11 +1,10 @@
 package com.example.mediaplayerapp;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,111 +12,102 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+@SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
 
-    private VideoView videoView;
-    private TextView tvStatus;
+    VideoView videoView;
+    TextView tvStatus;
+    Button btnOpenFile, btnOpenUrl, btnPlay, btnPause, btnStop, btnRestart;
 
-    private MediaPlayer audioPlayer;
-    private boolean isVideoMode = false;
-
+    MediaPlayer audioPlayer;
+    boolean isVideoMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // UI elements connect
         videoView = findViewById(R.id.videoView);
         tvStatus = findViewById(R.id.tvStatus);
-        Button btnOpenFile = findViewById(R.id.btnOpenFile);
-        Button btnOpenUrl = findViewById(R.id.btnOpenUrl);
-        Button btnPlay = findViewById(R.id.btnPlay);
-        Button btnPause = findViewById(R.id.btnPause);
-        Button btnStop = findViewById(R.id.btnStop);
-        Button btnRestart = findViewById(R.id.btnRestart);
+        btnOpenFile = findViewById(R.id.btnOpenFile);
+        btnOpenUrl = findViewById(R.id.btnOpenUrl);
+        btnPlay = findViewById(R.id.btnPlay);
+        btnPause = findViewById(R.id.btnPause);
+        btnStop = findViewById(R.id.btnStop);
+        btnRestart = findViewById(R.id.btnRestart);
 
-        // Audio File Select open phone storage
         btnOpenFile.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("audio/*"); // only audio files visible
+            intent.setType("audio/*");
             audioPickerLauncher.launch(intent);
         });
 
-        // URL input dialog box
         btnOpenUrl.setOnClickListener(v -> showUrlDialog());
 
-        // Play Button
         btnPlay.setOnClickListener(v -> {
             if (isVideoMode) {
                 videoView.start();
-                tvStatus.setText(getString(R.string.status_playing_video));
+                tvStatus.setText("Playing Video");
             } else if (audioPlayer != null) {
                 audioPlayer.start();
-                tvStatus.setText(getString(R.string.status_playing_audio));
+                tvStatus.setText("Playing Audio");
             } else {
-                Toast.makeText(this, getString(R.string.msg_open_media), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Please open a file or URL first", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Pause Button
         btnPause.setOnClickListener(v -> {
-            if (isVideoMode) {
-                if (videoView.isPlaying()) {
-                    videoView.pause();
-                    tvStatus.setText(getString(R.string.status_video_paused));
-                }
-            } else if (audioPlayer != null && audioPlayer.isPlaying()) {
+            if (isVideoMode && videoView.isPlaying()) {
+                videoView.pause();
+                tvStatus.setText("Video Paused");
+            } else if (!isVideoMode && audioPlayer != null && audioPlayer.isPlaying()) {
                 audioPlayer.pause();
-                tvStatus.setText(getString(R.string.status_audio_paused));
+                tvStatus.setText("Audio Paused");
             }
         });
 
-        // Stop Button
         btnStop.setOnClickListener(v -> {
             if (isVideoMode) {
                 videoView.stopPlayback();
-                tvStatus.setText(getString(R.string.status_video_stopped));
-            } else if (audioPlayer != null) {
+                videoView.resume();
+                tvStatus.setText("Video Stopped");
+            } else if (!isVideoMode && audioPlayer != null) {
                 audioPlayer.stop();
                 try {
                     audioPlayer.prepare();
-                } catch (Exception e) {
-                    Log.e("MainActivity", "Error preparing audio", e);
+                } catch (Exception ignored) {
                 }
-                tvStatus.setText(getString(R.string.status_audio_stopped));
+                tvStatus.setText("Audio Stopped");
             }
         });
 
-        // Restart Button
         btnRestart.setOnClickListener(v -> {
             if (isVideoMode) {
                 videoView.seekTo(0);
                 videoView.start();
-                tvStatus.setText(getString(R.string.status_video_restarted));
-            } else if (audioPlayer != null) {
+                tvStatus.setText("Video Restarted");
+            } else if (!isVideoMode && audioPlayer != null) {
                 audioPlayer.seekTo(0);
                 audioPlayer.start();
-                tvStatus.setText(getString(R.string.status_audio_restarted));
+                tvStatus.setText("Audio Restarted");
             }
         });
     }
-
 
     ActivityResultLauncher<Intent> audioPickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri audioUri = result.getData().getData();
-                    prepareAudio(audioUri);
+                    loadAudio(audioUri);
                 }
             }
     );
 
-    // Audio set function
-    private void prepareAudio(Uri uri) {
+    private void loadAudio(Uri uri) {
         try {
             if (audioPlayer != null) {
                 audioPlayer.release();
@@ -128,40 +118,37 @@ public class MainActivity extends AppCompatActivity {
             audioPlayer = new MediaPlayer();
             audioPlayer.setDataSource(this, uri);
             audioPlayer.prepare();
-            tvStatus.setText(getString(R.string.status_audio_loaded));
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.msg_error_audio), Toast.LENGTH_SHORT).show();
+            tvStatus.setText("Audio loaded. Click Play.");
+        } catch (Exception ignored) {
+            Toast.makeText(this, "Failed to load audio", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Video URL Popup dialog
     private void showUrlDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.dialog_title_video_url));
+        builder.setTitle("Enter Video URL");
 
         final EditText input = new EditText(this);
-        input.setText(getString(R.string.sample_video_url));
+        input.setText("https://www.w3schools.com/html/mov_bbb.mp4");
         builder.setView(input);
 
-        builder.setPositiveButton(getString(R.string.dialog_btn_open), (dialog, which) -> {
+        builder.setPositiveButton("Open", (dialog, which) -> {
             String url = input.getText().toString();
-            prepareVideo(url);
+            loadVideo(url);
         });
-        builder.setNegativeButton(getString(R.string.dialog_btn_cancel), (dialog, which) -> dialog.cancel());
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
 
-    // Video set function
-    private void prepareVideo(String url) {
+    private void loadVideo(String url) {
         if (audioPlayer != null) {
             audioPlayer.release();
             audioPlayer = null;
         }
         isVideoMode = true;
-        Uri videoUri = Uri.parse(url);
-        videoView.setVideoURI(videoUri);
+        videoView.setVideoURI(Uri.parse(url));
         videoView.requestFocus();
-        tvStatus.setText(getString(R.string.status_video_loaded));
+        tvStatus.setText("Video loaded. Click Play.");
     }
 
     @Override

@@ -16,4 +16,10 @@
     <string name="dialog_btn_open">Open</string>
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="sample_video_url">https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</string>
+    <string name="status_loading_audio">Status: Loading Audio...</string>
+    <string name="status_buffering_video">Status: Buffering Video...</string>
+    <string name="msg_video_ready">Video Ready</string>
+    <string name="msg_audio_ready">Audio Ready</string>
+    <string name="msg_error_timeout">Request Timeout: Network slow or URL unreachable</string>
+    <string name="msg_error_video">Error loading video</string>
 </resources>
