@@ -3,99 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:background="#121212"
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Media Player App"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="250dp"
+        android:layout_marginBottom="20dp"/>
 
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Media Loaded"
-        android:textColor="#FF0000"
-        android:layout_marginBottom="16dp"/>
+        android:text="Select Media"
+        android:textColor="#BBBBBB"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"/>
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:columnCount="2"
+        android:rowCount="3">
 
-        <Button
-            android:id="@+id/btnOpenFile"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Open File (Audio)"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnOpenUrl"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Open URL (Video)"
-            android:layout_marginStart="4dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnPlay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Play"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnPause"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pause"
-            android:layout_marginStart="4dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnStop"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Stop"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnRestart"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Restart"
-            android:layout_marginStart="4dp"/>
-    </LinearLayout>
-
+        <Button android:id="@+id/btnOpenFile" android:text="Audio File" android:layout_columnWeight="1" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnOpenUrl" android:text="Video URL" android:layout_columnWeight="1" android:layout_margin="4dp"/>
+        <Button android:id="@+id/btnPlay" android:text="PLAY" android:layout_columnWeight="1" android:layout_margin="4dp" android:backgroundTint="#4CAF50"/>
+        <Button android:id="@+id/btnPause" android:text="PAUSE" android:layout_columnWeight="1" android:layout_margin="4dp" android:backgroundTint="#FF9800"/>
+        <Button android:id="@+id/btnStop" android:text="STOP" android:layout_columnWeight="1" android:layout_margin="4dp" android:backgroundTint="#F44336"/>
+        <Button android:id="@+id/btnRestart" android:text="RESTART" android:layout_columnWeight="1" android:layout_margin="4dp"/>
+    </GridLayout>
 </LinearLayout>
